@@ -1,0 +1,13 @@
+{
+  "name": "automacao-navegador",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "crawler": "^1.2.1",
+    "json2csv": "^4.5.4",
+    "puppeteer": "^2.1.1"
+  },
+  "repository": "git@github.com:atiladelcanton/emdec.git",
+  "author": "Atila Rampazo <atilarampazo@gmail.com>"
+}
