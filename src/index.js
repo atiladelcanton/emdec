@@ -4,6 +4,7 @@ const fs = require("fs");
 const { Parser } = require("json2csv");
 
 let data = [];
+let dataFailed = [];
 async function extraction() {
   try {
     const browser = await puppeteer.launch({ headless: true });
@@ -20,7 +21,19 @@ async function extraction() {
         await page.goto(
           `http://www.emdec.com.br/ABusInf/consultarlinha.asp?linha=${lines[x]}-0&Sistema=&Ed=0&consulta=1`
         );
-        const descricao_linha = await page.$eval("#taid", el => el.textContent);
+        let descricaoLinha = "Informação Ausente";
+        if ((await page.$("#taid")) !== null) {
+          descricaoLinha = await page.$eval("#taid", el => el.textContent);
+        } else {
+          const objDataFailed = {
+            linha: lines[x]
+          };
+          dataFailed.push(objDataFailed);
+          const parserFailed = new Parser();
+          const csvFailed = parserFailed.parse(dataFailed);
+          fs.writeFileSync("./dados-endec-ausente.csv", csvFailed, "utf-8");
+        }
+
         const linha = await page.evaluate(
           () => document.getElementsByName("txtPesquisa")[0].defaultValue
         );
@@ -30,13 +43,14 @@ async function extraction() {
         );
         const objData = {
           linha: linha,
-          desc: descricao_linha,
+          desc: descricaoLinha,
           empresa: empresa
         };
         data.push(objData);
         const parser = new Parser();
         const csv = parser.parse(data);
         fs.writeFileSync("./dados-endec.csv", csv, "utf-8");
+
         delay();
       }
     }
