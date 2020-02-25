@@ -7,6 +7,7 @@ Proximos passos:
 - [ ] Obter Horarios 
 - [ ] Obter Itinerarios
 - [ ] Armazenar no MongoDB
+- [ ] Refatorar
 - [ ] Criar Api Publica dos Dados
 
 Futuramente, a ideia e fazer de outros transportes publicos de outras cidades / estados
